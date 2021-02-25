@@ -1,0 +1,217 @@
+@startuml
+
+title __CONTROLLER's Class Diagram__\n
+
+  namespace Controller {
+    class Controller.AdministratorController {
+        - coordinators : List<String>
+        - postmans : List<String>
+        - selectedUserName : String
+        - users : Map<String, User>
+        + AdministratorController()
+        + addEntryButtonActionListener()
+        + classifyUsers()
+        + deleteButtonActionListener()
+        + updateEntryButtonActionListener()
+        + updateSecondaryTable()
+        + viewCoordinatorsButtonActionListener()
+        + viewPostmansButtonActionListener()
+        + windowListener()
+        - createTable()
+    }
+  }
+  
+
+  namespace Controller {
+    class Controller.AuthenticationController {
+        - hasher : MessageDigest
+        - users : Map<String, User>
+        + AuthenticationController()
+        + addUser()
+        + deleteUser()
+        + endView()
+        + getCurrentUser()
+        + getUserByID()
+        + getUsers()
+        + updateUser()
+        + verifyLogin()
+        - getMd5FromString()
+        - setCurrentUser()
+        - setUsersData()
+    }
+  }
+  
+
+  namespace Controller {
+    class Controller.CoordinatorViewController {
+        - parcels : Map<Integer, Parcel>
+        - selectedParcelID : Integer
+        + CoordinatorViewController()
+        + addParcelButtonActionListener()
+        + deleteParcelButtonActionListener()
+        + getCurrentUser()
+        + mapPaneComponentAdapter()
+        + populatePostmanTable()
+        + saveReportButtonActionListener()
+        + searchParcelByIDButtonActionListener()
+        + updateParcelButtonActionListener()
+        + updateSecondaryTable()
+        + viewParcelsButtonActionListener()
+        + windowListener()
+        - createTable()
+        - setCurrentUser()
+    }
+  }
+  
+
+  namespace Controller {
+    class Controller.GraphController {
+        - graph : Graph<Parcel, WeightedEdge>
+        - vertexSupplier : Supplier<String>
+        + GraphController()
+        + GraphController()
+        + addParcelToCompleteGraph()
+        + createContainer()
+        + emptyGraph()
+        + printGraph()
+        + removeParcelFromGraph()
+        + saveGraphAsLayout()
+        + updateParcelInGraph()
+        - convertGraph()
+        - distance()
+    }
+  }
+  
+
+  namespace Controller {
+    class Controller.GraphController.WeightedEdge {
+        + toString()
+    }
+  }
+  
+
+  namespace Controller {
+    class Controller.JGraphXAdapter {
+        - cellToEdgeMap : HashMap<mxICell, E>
+        - cellToVertexMap : HashMap<mxICell, V>
+        - edgeToCellMap : HashMap<E, mxICell>
+        - graphT : Graph<V, E>
+        - vertexToCellMap : HashMap<V, mxICell>
+        + JGraphXAdapter()
+        + JGraphXAdapter()
+        + edgeAdded()
+        + edgeRemoved()
+        + getCellToEdgeMap()
+        + getCellToVertexMap()
+        + getEdgeToCellMap()
+        + getVertexToCellMap()
+        + vertexAdded()
+        + vertexRemoved()
+        - addJGraphTEdge()
+        - addJGraphTVertex()
+        - insertJGraphT()
+        - removeEdge()
+    }
+  }
+  
+
+  namespace Controller {
+    class Controller.MainController {
+        + MainController()
+        + getGraphLayout()
+        + serialize()
+        + switchView()
+    }
+  }
+  
+
+  namespace Controller {
+    class Controller.ParcelController {
+        - parcels : Map<Integer, Parcel>
+        + ParcelController()
+        + addParcel()
+        + getGraphLayout()
+        + getParcelByID()
+        + getParcels()
+        + getParcelsByPostmanID()
+        + printParcelGraph()
+        + removeParcel()
+        + updateParcel()
+        - setParcels()
+    }
+  }
+  
+
+  namespace Controller {
+    class Controller.PostmanViewController {
+        - parcels : List<Parcel>
+        + PostmanViewController()
+        + PostmanViewController()
+        + getCurrentUser()
+        + mapPaneComponentAdapter()
+        + searchParcelByIDButtonActionListener()
+        + viewParcelsButtonActionListener()
+        + windowListener()
+        - createTable()
+        - setCurrentUser()
+    }
+  }
+  
+
+  namespace Controller {
+    class Controller.Serializer {
+        {static} - parcelFilename : String
+        {static} - usersFilename : String
+        {static} + deserializeParcels()
+        {static} + deserializeUsers()
+        {static} + serializeParcels()
+        {static} + serializeParcelsAsCSV()
+        {static} + serializeParcelsAsXML()
+        {static} + serializeReportAsJson()
+        {static} + serializeUsers()
+    }
+  }
+  
+
+  namespace Controller {
+    class Controller.ViewsController {
+    }
+  }
+  
+
+  Controller.AdministratorController o-- View.AdministratorView : administratorView
+  Controller.AdministratorController o-- Controller.AuthenticationController : authenticationController
+  Controller.AdministratorController o-- Model.User.Type : currentShowingType
+  Controller.AdministratorController o-- Controller.MainController : mainController
+  Controller.AuthenticationController o-- Model.User : currentUser
+  Controller.AuthenticationController o-- View.LoginView : loginView
+  Controller.AuthenticationController o-- Controller.MainController : mainController
+  Controller.CoordinatorViewController o-- Model.User : currentUser
+  Controller.CoordinatorViewController o-- Controller.MainController : mainController
+  Controller.CoordinatorViewController o-- Controller.ParcelController : parcelController
+  Controller.CoordinatorViewController o-- Controller.AuthenticationController : authenticationController
+  Controller.CoordinatorViewController o-- View.CoordinatorView : coordinatorView
+  Controller.GraphController o-- View.PostmanView : postmanView
+  Controller.GraphController +-down- Controller.GraphController.WeightedEdge
+  Controller.GraphController.WeightedEdge -up-|> org.jgrapht.graph.DefaultWeightedEdge
+  Controller.JGraphXAdapter .up.|> org.jgrapht.event.GraphListener
+  Controller.JGraphXAdapter -up-|> com.mxgraph.view.mxGraph
+  Controller.MainController o-- Controller.AdministratorController : administratorController
+  Controller.MainController o-- Controller.AuthenticationController : authenticationController
+  Controller.MainController o-- Controller.ParcelController : parcelController
+  Controller.ParcelController o-- Controller.GraphController : graphController
+  Controller.ParcelController o-- Controller.MainController : mainController
+  Controller.PostmanViewController o-- Model.User : currentUser
+  Controller.PostmanViewController o-- Controller.MainController : mainController
+  Controller.PostmanViewController o-- Controller.ParcelController : parcelController
+  Controller.PostmanViewController o-- View.PostmanView : postmanView
+
+
+right footer
+
+
+PlantUML diagram generated by SketchIt! (https://bitbucket.org/pmesmeur/sketch.it)
+For more information about this tool, please contact philippe.mesmeur@gmail.com
+endfooter
+
+@enduml
